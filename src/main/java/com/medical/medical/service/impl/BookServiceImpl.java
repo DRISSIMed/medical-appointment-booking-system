@@ -10,12 +10,14 @@ import com.medical.medical.model.TimeSlot;
 import com.medical.medical.repository.DoctorRepository;
 import com.medical.medical.repository.TimeSlotRepository;
 import com.medical.medical.service.BookService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 public class BookServiceImpl  implements BookService {
 
     private final TimeSlotRepository timeSlotRepository;
@@ -30,7 +32,6 @@ public class BookServiceImpl  implements BookService {
 
     @Override
     public List<TimeSlotResponse> getAvailableSlots(Long doctorId) {
-        log.debug("Fetching available slots for doctor id: {}", doctorId);
         if (!doctorRepository.existsById(doctorId)) {
             throw new ResourceNotFoundException("Doctor not found with id: " + doctorId);
         }
@@ -42,12 +43,10 @@ public class BookServiceImpl  implements BookService {
 
     @Override
     public BookingResponse bookSlot(BookingRequest request) {
-        log.info("Booking slot {} for patient: {}", request.timeSlotId(), request.patientEmail());
-
         TimeSlot slot = timeSlotRepository.findById(request.timeSlotId())
                 .orElseThrow(() -> new ResourceNotFoundException("TimeSlot  not found with id" + request.timeSlotId()));
 
-        if (slot.isBooked()) {
+        if (!slot.isAvailable()) {
             throw new SlotAlreadyBookedException("Doctor mr " + slot.getDoctor().getFullName()+  " have been already booked" );
         }
 
@@ -55,9 +54,6 @@ public class BookServiceImpl  implements BookService {
         slot.setPatientName(request.patientName());
         slot.setPatientEmail(request.patientEmail());
         timeSlotRepository.save(slot);
-
-        log.info("Slot {} successfully booked for {}", slot.getId(), request.patientEmail());
-
         return new BookingResponse(
                 slot.getId(),
                 slot.getDoctor().getFullName(),

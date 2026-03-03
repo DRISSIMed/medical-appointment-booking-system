@@ -37,5 +37,12 @@ public class Doctor {
     public String getFullName() {
         return firstName + " " + lastName;
     }
+
+
+    public Doctor(String firstName, String lastName, Specialty specialty) {
+        this.firstName = firstName;
+        this.lastName  = lastName;
+        this.specialty = specialty;
+    }
 }
 

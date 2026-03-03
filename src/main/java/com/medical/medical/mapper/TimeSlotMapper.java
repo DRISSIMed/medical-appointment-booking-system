@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface TimeSlotMapper {
 
-    @Mapping(target = "doctorId", source = "doctor.id")
+    @Mapping(target = "doctorId", expression = "java(timeSlot.getDoctor().getId())")
     TimeSlotResponse toResponse(TimeSlot timeSlot);
 
     List<TimeSlotResponse> toResponseList(List<TimeSlot> timeSlots);

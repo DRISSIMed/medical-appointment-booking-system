@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "time_slots")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
+@Getter
 public class TimeSlot {
 
     @Id
@@ -38,5 +38,13 @@ public class TimeSlot {
 
     public boolean isAvailable() {
         return !booked;
+    }
+
+
+    public TimeSlot(Doctor doctor, LocalDateTime startTime, LocalDateTime endTime,boolean booked) {
+        this.doctor    = doctor;
+        this.startTime = startTime;
+        this.endTime   = endTime;
+        this.booked    = false;
     }
 }

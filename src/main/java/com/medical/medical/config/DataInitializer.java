@@ -33,14 +33,11 @@ public class DataInitializer implements CommandLineRunner {
         Doctor drBenali  = createDoctor("Karim",  "Benali",  Specialty.GENERAL_PRACTICE);
         Doctor drAhmadi   = createDoctor("Asmae",    "Ahmadi",    Specialty.DERMATOLOGY);
         Doctor drBayane  = createDoctor("Hassan", "Bayane",  Specialty.NEUROLOGY);
-
         doctorRepository.saveAll(List.of(drSalhi, drBenali, drAhmadi, drBayane));
-
         generateSlots(drSalhi);
         generateSlots(drBenali);
         generateSlots(drAhmadi);
         generateSlots(drBayane);
-
     }
 
     private Doctor createDoctor(String firstName, String lastName, Specialty specialty) {
